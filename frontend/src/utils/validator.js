@@ -1,12 +1,12 @@
 const validator = {
   path: {
-    source: [],
-    target: []
+    source: [(v) => !!v || '출발 역이 필요합니다', (v) => !(Number.isInteger(v) && v < 0) || '올바른 출발 역이 아닙니다'],
+    target: [(v) => !!v || '도착 역이 필요합니다', (v) => !(Number.isInteger(v) && v < 0) || '올바른 도착 역이 아닙니다']
   },
   departureTime: {
-    dayTime: [],
-    hour: [],
-    minute: []
+    dayTime: [(v) => !!v || '오전 혹은 오후값이 필요합니다', (v) => !(v === "오전" || v === "오후") || '오전 혹은 오후 값이 필요합니다'],
+    hour: [(v) => !!v || '시간 입력이 필요합니다', (v) => !(Number.isInteger(v) && v >= 1 && v <= 12) || '0 부터 12 사이의 값이 필요합니다'],
+    minute: [(v) => !!v || '분이 입력이 필요합니다', (v) => !(Number.isInteger(v) && v >= 0 && v <= 60) || '0 부터 60 사이의 값이 필요합니다']
   },
   stationName: [(v) => !!v || '이름 입력이 필요합니다.', (v) => v.length > 0 || '이름은 1글자 이상 입력해야 합니다.'],
   line: {
