@@ -1,6 +1,7 @@
 package wooteco.subway.members.member.ui;
 
 import wooteco.security.core.AuthenticationPrincipal;
+import wooteco.security.web.AuthorizationException;
 import wooteco.subway.members.member.application.MemberService;
 import wooteco.subway.members.member.domain.LoginMember;
 import wooteco.subway.members.member.dto.MemberRequest;
@@ -44,6 +45,9 @@ public class MemberController {
 
     @GetMapping("/members/me")
     public ResponseEntity<MemberResponse> findMemberOfMine(@AuthenticationPrincipal LoginMember loginMember) {
+        if (loginMember == null || loginMember.isDummy()) {
+            throw new AuthorizationException();
+        }
         MemberResponse member = memberService.findMember(loginMember.getId());
         return ResponseEntity.ok().body(member);
     }

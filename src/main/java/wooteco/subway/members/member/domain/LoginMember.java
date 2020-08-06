@@ -1,6 +1,5 @@
 package wooteco.subway.members.member.domain;
 
-
 import wooteco.security.core.userdetails.UserDetails;
 
 public class LoginMember implements UserDetails {
@@ -67,5 +66,13 @@ public class LoginMember implements UserDetails {
             return (fare - 350) * 50 / 100;
         }
         return 0;
+    }
+
+    public boolean isDummy() {
+        try {
+            return id == 0;
+        } catch (NullPointerException e) {
+            return true;
+        }
     }
 }

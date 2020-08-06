@@ -1,18 +1,26 @@
 package wooteco.security.web;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
 import wooteco.security.core.Authentication;
 import wooteco.security.core.AuthenticationPrincipal;
 import wooteco.security.core.context.SecurityContextHolder;
-
-import java.util.Arrays;
-import java.util.Map;
+import wooteco.subway.members.member.domain.LoginMember;
 
 public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArgumentResolver {
+
+    private static final long DUMMY_ID = 0L;
+    private static final String DUMMY_EMAIL = "test@mail.com";
+    private static final String DUMMY_PASSWORD = "testpassword";
+    private static final int DUMMY_AGE = 0;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(AuthenticationPrincipal.class);
@@ -22,7 +30,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new AuthorizationException();
+            return new LoginMember(DUMMY_ID, DUMMY_EMAIL, DUMMY_PASSWORD, DUMMY_AGE);
         }
         if (authentication.getPrincipal() instanceof Map) {
             return extractPrincipal(parameter, authentication);
