@@ -1,19 +1,20 @@
 package wooteco.subway.maps.map.acceptance;
 
-import com.google.common.collect.Lists;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
+import static wooteco.subway.maps.line.acceptance.step.LineStationAcceptanceStep.*;
+import static wooteco.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import com.google.common.collect.Lists;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import wooteco.subway.common.acceptance.AcceptanceTest;
 import wooteco.subway.maps.line.acceptance.step.LineAcceptanceStep;
 import wooteco.subway.maps.line.dto.LineResponse;
 import wooteco.subway.maps.station.acceptance.step.StationAcceptanceStep;
 import wooteco.subway.maps.station.dto.StationResponse;
-
-import static wooteco.subway.maps.line.acceptance.step.LineStationAcceptanceStep.지하철_노선에_지하철역_등록되어_있음;
-import static wooteco.subway.maps.map.acceptance.step.PathAcceptanceStep.*;
 
 @DisplayName("지하철 경로 조회")
 public class PathAcceptanceTest extends AcceptanceTest {
@@ -46,9 +47,9 @@ public class PathAcceptanceTest extends AcceptanceTest {
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
         // 토니역 = 지하철역_등록되어_있음("토니역");
 
-        이호선 = 지하철_노선_등록되어_있음("2호선", "GREEN");
-        신분당선 = 지하철_노선_등록되어_있음("신분당선", "RED");
-        삼호선 = 지하철_노선_등록되어_있음("3호선", "ORANGE");
+        이호선 = 지하철_노선_추가_운임과_함께_등록되어_있음("2호선", "GREEN", "0");
+        신분당선 = 지하철_노선_추가_운임과_함께_등록되어_있음("신분당선", "RED", "500");
+        삼호선 = 지하철_노선_추가_운임과_함께_등록되어_있음("3호선", "ORANGE", "900");
         // 토니선 = 지하철_노선_등록되어_있음("토니선", "BLUE");
 
         지하철_노선에_지하철역_등록되어_있음(이호선, null, 교대역, 0, 0);
@@ -93,11 +94,11 @@ public class PathAcceptanceTest extends AcceptanceTest {
 		//when
 		ExtractableResponse<Response> response = 거리_경로_조회_요청("DURATION", 1L, 3L);
 		//then
-		적절한_금액을_응답(response, 200); // TODO: 2020/08/06 유동적으로 변경
+		적절한_금액을_응답(response, 700); // TODO: 2020/08/06 유동적으로 변경 200 + 500
 	}
 
-	private Long 지하철_노선_등록되어_있음(String name, String color) {
-        ExtractableResponse<Response> createLineResponse1 = LineAcceptanceStep.지하철_노선_등록되어_있음(name, color);
+	private Long 지하철_노선_추가_운임과_함께_등록되어_있음(String name, String color, String extraFare) {
+        ExtractableResponse<Response> createLineResponse1 = LineAcceptanceStep.지하철_노선_추가_운임과_함께_등록되어_있음(name, color, extraFare);
         return createLineResponse1.as(LineResponse.class).getId();
     }
 
