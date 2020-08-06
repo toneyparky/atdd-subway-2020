@@ -1,27 +1,30 @@
 package wooteco.subway.maps.line.application;
 
-import wooteco.subway.maps.line.domain.ExtraFare;
-import wooteco.subway.maps.line.domain.Line;
-import wooteco.subway.maps.line.domain.LineRepository;
-import wooteco.subway.maps.line.domain.LineStation;
-import wooteco.subway.maps.line.dto.LineResponse;
-import wooteco.subway.common.TestObjectUtils;
-import wooteco.subway.maps.station.application.StationService;
-import wooteco.subway.maps.station.domain.Station;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import wooteco.subway.common.TestObjectUtils;
+import wooteco.subway.maps.line.domain.ExtraFare;
+import wooteco.subway.maps.line.domain.Line;
+import wooteco.subway.maps.line.domain.LineRepository;
+import wooteco.subway.maps.line.domain.LineStation;
+import wooteco.subway.maps.line.dto.LineResponse;
+import wooteco.subway.maps.station.application.StationService;
+import wooteco.subway.maps.station.domain.Station;
 
 public class LineServiceTest {
     private Map<Long, Station> stations;
@@ -51,5 +54,22 @@ public class LineServiceTest {
         LineResponse result = lineService.findLineResponsesById(line.getId());
 
         assertThat(result.getStations()).hasSize(2);
+    }
+
+    @DisplayName("노선에 따른 최대 추가 운임을 반환한다.")
+    @Test
+    void getMaxExtraFare() {
+        LineRepository lineRepository = mock(LineRepository.class);
+        StationService stationService = mock(StationService.class);
+        LineService lineService = new LineService(lineRepository, stationService);
+
+        List<Line> lines = Arrays.asList(
+            new Line("신분당선", "red lighten-1", LocalTime.now(), LocalTime.now(), 10, new ExtraFare(500)),
+            new Line("3호선", "orange darken-1", LocalTime.now(), LocalTime.now(), 10, new ExtraFare(900))
+        );
+
+        when(lineRepository.findAllById(anySet())).thenReturn(lines);
+
+        assertThat(lineService.getMaxExtraFare(anySet())).isEqualTo(900);
     }
 }

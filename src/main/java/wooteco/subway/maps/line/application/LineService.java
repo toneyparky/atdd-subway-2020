@@ -1,5 +1,13 @@
 package wooteco.subway.maps.line.application;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import wooteco.subway.maps.line.domain.Line;
 import wooteco.subway.maps.line.domain.LineRepository;
 import wooteco.subway.maps.line.dto.LineRequest;
@@ -8,12 +16,6 @@ import wooteco.subway.maps.line.dto.LineStationResponse;
 import wooteco.subway.maps.station.application.StationService;
 import wooteco.subway.maps.station.domain.Station;
 import wooteco.subway.maps.station.dto.StationResponse;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -72,5 +74,16 @@ public class LineService {
         return line.getStationInOrder().stream()
                 .map(it -> LineStationResponse.of(line.getId(), it, StationResponse.of(stations.get(it.getStationId()))))
                 .collect(Collectors.toList());
+    }
+
+    public int getMaxExtraFare(Set<Long> ids) {
+        List<Line> lines = lineRepository.findAllById(ids); // TODO: 2020/08/06 일급컬렉션
+        if (lines.size() == 1) {
+            return lines.get(0).getExtraFare().getExtraFare();
+        }
+
+        return lines.stream()
+            .map(line -> line.getExtraFare().getExtraFare())
+            .max(Integer::compare).orElse(-1);
     }
 }
