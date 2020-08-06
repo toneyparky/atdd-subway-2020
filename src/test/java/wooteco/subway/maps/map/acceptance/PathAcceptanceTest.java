@@ -93,7 +93,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 		//when
 		ExtractableResponse<Response> response = 거리_경로_조회_요청("DURATION", 1L, 3L);
 		//then
-		적절한_금액을_응답(response, 1250); // TODO: 2020/08/06 1250 + 100 + 500
+		적절한_금액을_응답(response, 200); // TODO: 2020/08/06 유동적으로 변경
 	}
 
 	private Long 지하철_노선_등록되어_있음(String name, String color) {
