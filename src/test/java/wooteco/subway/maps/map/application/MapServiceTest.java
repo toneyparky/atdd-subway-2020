@@ -103,11 +103,12 @@ public class MapServiceTest {
     @Test
     void calculateExtraFare_NotCharging() {
         when(lineService.findLines()).thenReturn(lines);
-        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
+        when(lineService.getMaxExtraFare(anySet())).thenReturn(900);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
+        when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
         PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
 
-        assertThat(pathResponse.getFare()).isZero();
+        assertThat(pathResponse.getFare()).isNotZero();
     }
 }

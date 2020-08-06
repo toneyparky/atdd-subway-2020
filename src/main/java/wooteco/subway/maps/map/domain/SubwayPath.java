@@ -3,6 +3,7 @@ package wooteco.subway.maps.map.domain;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SubwayPath {
@@ -26,6 +27,12 @@ public class SubwayPath {
                 .collect(Collectors.toList()));
 
         return stationIds;
+    }
+
+    public Set<Long> extractLineId() {
+        return lineStationEdges.stream()
+            .map(LineStationEdge::getLineId)
+            .collect(Collectors.toSet());
     }
 
     public int calculateDuration() {
