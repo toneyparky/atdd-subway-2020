@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SubwayPath {
+    private static final int NON_CHARGE_THRESHOLD = 10;
+    private static final int LITTLE_CHARGE_THRESHOLD = 50;
+    private static final int No_CHARGE = 0;
     private List<LineStationEdge> lineStationEdges;
 
     public SubwayPath(List<LineStationEdge> lineStationEdges) {
@@ -31,5 +34,19 @@ public class SubwayPath {
 
     public int calculateDistance() {
         return lineStationEdges.stream().mapToInt(it -> it.getLineStation().getDistance()).sum();
+    }
+
+    public int calculateExtraFareByDistance() {
+        int distance = calculateDistance();
+
+        if (distance <= NON_CHARGE_THRESHOLD) {
+            return No_CHARGE;
+        }
+
+        if (distance <= LITTLE_CHARGE_THRESHOLD) {
+            return (int) ((Math.ceil(((distance - NON_CHARGE_THRESHOLD) - 1) / 5) + 1) * 100);
+        }
+
+        return (int) ((Math.ceil(((distance - LITTLE_CHARGE_THRESHOLD) - 1) / 8) + 1) * 100) + 800;
     }
 }
