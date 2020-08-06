@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 import wooteco.subway.common.TestObjectUtils;
+import wooteco.subway.maps.line.domain.ExtraFare;
 import wooteco.subway.maps.line.domain.Line;
 import wooteco.subway.maps.line.domain.LineStation;
 import wooteco.subway.maps.station.domain.Station;
@@ -35,7 +36,7 @@ class SubwayPathTest {
 		stations.put(5L, TestObjectUtils.createStation(5L, "토니역"));
 		stations.put(6L, TestObjectUtils.createStation(6L, "브라운역"));
 
-		Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE");
+		Line line3 = TestObjectUtils.createLine(3L, "3호선", "ORANGE", new ExtraFare(900));
 		line3.addLineStation(new LineStation(1L, null, 0, 0));
 		LineStation lineStation6 = new LineStation(4L, 1L, 1, 2);
 		LineStation lineStation7 = new LineStation(3L, 4L, 2, 2);

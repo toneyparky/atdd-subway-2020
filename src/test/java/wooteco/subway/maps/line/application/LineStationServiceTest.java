@@ -1,6 +1,7 @@
 package wooteco.subway.maps.line.application;
 
 import com.google.common.collect.Maps;
+import wooteco.subway.maps.line.domain.ExtraFare;
 import wooteco.subway.maps.line.domain.Line;
 import wooteco.subway.maps.line.domain.LineStation;
 import wooteco.subway.maps.line.dto.LineStationCreateRequest;
@@ -50,7 +51,7 @@ public class LineStationServiceTest {
         stations.put(2L, station2);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
 
-        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED");
+        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", new ExtraFare(500));
         when(lineService.findLineById(anyLong())).thenReturn(line);
 
         // when
@@ -79,7 +80,7 @@ public class LineStationServiceTest {
     @Test
     void removeLineStation() {
         // given
-        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED");
+        Line line = TestObjectUtils.createLine(1L, "신분당선", "RED", new ExtraFare(500));
         line.addLineStation(new LineStation(1L, null, 10, 10));
         line.addLineStation(new LineStation(2L, 1L, 10, 10));
         when(lineService.findLineById(anyLong())).thenReturn(line);
