@@ -170,7 +170,7 @@
             <div v-if="pathResult" class="d-flex justify-center mt-4">
               <v-card width="400" flat>
                 <template v-for="(station, index) in pathResult.stations">
-                  <span :key="station.id">
+                  <span :key="station.id + '-station'">
                     <v-chip :key="index" class="ma-2" :color="index === 0 || index === pathResult.stations.length - 1 ? 'amber' : ''">
                       <v-avatar v-if="index === 0 || index === pathResult.stations.length - 1" left>
                         <v-icon>mdi-subway</v-icon>
@@ -220,6 +220,12 @@ export default {
     ...mapActions([SEARCH_PATH, FETCH_STATIONS]),
     async onSearchResult() {
       try {
+        const data = {
+          "source": this.path.source,
+          "target": this.path.target,
+          "type": this.path.type
+        }
+        await this.searchPath(data)
       } catch (e) {
         this.showSnackbar(SNACKBAR_MESSAGES.COMMON.FAIL)
         console.error(e)
