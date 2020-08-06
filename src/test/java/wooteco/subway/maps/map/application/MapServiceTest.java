@@ -13,6 +13,8 @@ import wooteco.subway.maps.map.dto.PathResponse;
 import wooteco.subway.maps.station.application.StationService;
 import wooteco.subway.maps.station.domain.Station;
 import wooteco.subway.common.TestObjectUtils;
+import wooteco.subway.members.member.domain.LoginMember;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +85,7 @@ public class MapServiceTest {
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE, new LoginMember(1L, "a@a", "qw", 20));
 
         assertThat(pathResponse.getStations()).isNotEmpty();
         assertThat(pathResponse.getDuration()).isNotZero();
@@ -107,7 +109,7 @@ public class MapServiceTest {
         when(stationService.findStationsByIds(anyList())).thenReturn(stations);
         when(pathService.findPath(anyList(), anyLong(), anyLong(), any())).thenReturn(subwayPath);
 
-        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE);
+        PathResponse pathResponse = mapService.findPath(1L, 3L, PathType.DISTANCE, new LoginMember(1L, "a@a", "qw", 20));
 
         assertThat(pathResponse.getFare()).isNotZero();
     }

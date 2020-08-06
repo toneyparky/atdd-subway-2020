@@ -45,12 +45,10 @@ public class PathAcceptanceTest extends AcceptanceTest {
         강남역 = 지하철역_등록되어_있음("강남역");
         양재역 = 지하철역_등록되어_있음("양재역");
         남부터미널역 = 지하철역_등록되어_있음("남부터미널역");
-        // 토니역 = 지하철역_등록되어_있음("토니역");
 
         이호선 = 지하철_노선_추가_운임과_함께_등록되어_있음("2호선", "GREEN", "0");
         신분당선 = 지하철_노선_추가_운임과_함께_등록되어_있음("신분당선", "RED", "500");
         삼호선 = 지하철_노선_추가_운임과_함께_등록되어_있음("3호선", "ORANGE", "900");
-        // 토니선 = 지하철_노선_등록되어_있음("토니선", "BLUE");
 
         지하철_노선에_지하철역_등록되어_있음(이호선, null, 교대역, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(이호선, 교대역, 강남역, 8, 2);
@@ -61,8 +59,6 @@ public class PathAcceptanceTest extends AcceptanceTest {
         지하철_노선에_지하철역_등록되어_있음(삼호선, null, 교대역, 0, 0);
         지하철_노선에_지하철역_등록되어_있음(삼호선, 교대역, 남부터미널역, 6, 2);
         지하철_노선에_지하철역_등록되어_있음(삼호선, 남부터미널역, 양재역, 8, 2);
-
-		// 지하철_노선에_지하철역_등록되어_있음(토니선, 양재역, 토니역, 17, 20);
 
 	}
 
@@ -94,7 +90,7 @@ public class PathAcceptanceTest extends AcceptanceTest {
 		//when
 		ExtractableResponse<Response> response = 거리_경로_조회_요청("DURATION", 1L, 3L);
 		//then
-		적절한_금액을_응답(response, 700); // TODO: 2020/08/06 유동적으로 변경 200 + 500
+		적절한_금액을_응답(response, 1950);
 	}
 
 	private Long 지하철_노선_추가_운임과_함께_등록되어_있음(String name, String color, String extraFare) {
