@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import wooteco.subway.maps.line.domain.Line;
 import wooteco.subway.maps.line.domain.LineRepository;
+import wooteco.subway.maps.line.domain.Lines;
 import wooteco.subway.maps.line.dto.LineRequest;
 import wooteco.subway.maps.line.dto.LineResponse;
 import wooteco.subway.maps.line.dto.LineStationResponse;
@@ -77,13 +78,7 @@ public class LineService {
     }
 
     public int getMaxExtraFare(Set<Long> ids) {
-        List<Line> lines = lineRepository.findAllById(ids); // TODO: 2020/08/06 일급컬렉션
-        if (lines.size() == 1) {
-            return lines.get(0).getExtraFare().getExtraFare();
-        }
-
-        return lines.stream()
-            .map(line -> line.getExtraFare().getExtraFare())
-            .max(Integer::compare).orElse(-1);
+        Lines lines = new Lines(lineRepository.findAllById(ids));
+        return lines.getMaxExtraFare();
     }
 }
