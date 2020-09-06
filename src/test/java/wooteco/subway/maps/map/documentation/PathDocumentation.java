@@ -17,10 +17,31 @@ import wooteco.subway.maps.map.ui.MapController;
 @WebMvcTest(controllers = {MapController.class})
 public class PathDocumentation extends Documentation {
 
-	@DisplayName("경로를 찾는다.")
+	@DisplayName("로그인 안 한 사용자가 경로를 조회한다.")
 	@Test
-	public static RestDocumentationResultHandler findPath() {
-		return document("paths/find",
+	public static RestDocumentationResultHandler findPathWithoutLogin() {
+		return document("paths/find-without-login",
+			getDocumentRequest(),
+			getDocumentResponse(),
+			requestParameters(
+				parameterWithName("source").description("출발역 아이디"),
+				parameterWithName("target").description("도착역 아이디"),
+				parameterWithName("type").description("경로 검색 기준")),
+			responseFields(
+				fieldWithPath("stations.[]").type(JsonFieldType.ARRAY).description("경로에 해당 되는 역 목록"),
+				fieldWithPath("stations.[].id").type(JsonFieldType.NUMBER).description("경로에 해당 되는 역 ID"),
+				fieldWithPath("stations.[].name").type(JsonFieldType.STRING).description("경로에 해당 되는 역 이름"),
+				fieldWithPath("duration").type(JsonFieldType.NUMBER).description("경로 예상 시간(분)"),
+				fieldWithPath("distance").type(JsonFieldType.NUMBER).description("경로 예상 거리(KM)"),
+				fieldWithPath("fare").type(JsonFieldType.NUMBER).description("요금")
+			)
+		);
+	}
+
+	@DisplayName("로그인한 사용자가 경로를 조회한다.")
+	@Test
+	public static RestDocumentationResultHandler findPathWithLogin() {
+		return document("paths/find-with-login",
 			getDocumentRequest(),
 			getDocumentResponse(),
 			requestHeaders(

@@ -70,19 +70,33 @@ public class MapControllerTest extends PathDocumentation {
 		tokenResponse = new TokenResponse("token");
 	}
 
-	@DisplayName("경로를 조회한다.")
+	@DisplayName("로그인 안 한 사용자가 경로를 조회한다.")
 	@Test
-	void findPaths() throws Exception {
+	void findPathsWithoutLogin() throws Exception {
 		when(mapService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(
 			new PathResponse(stations, duration, distance, fare));
 
 		mockMvc.perform(get("/paths")
-			.header("Authorization", "Bearer" + tokenResponse.getAccessToken())
 			.queryParam("source", "1")
 			.queryParam("target", "2")
 			.queryParam("type", "DISTANCE")
 		).andExpect(status().isOk())
-			.andDo(PathDocumentation.findPath());
+			.andDo(PathDocumentation.findPathWithoutLogin());
+	}
+
+	@DisplayName("로그인 한 사용자가 경로를 조회한다.")
+	@Test
+	void findPathsWithLogin() throws Exception {
+		when(mapService.findPath(anyLong(), anyLong(), any(), any())).thenReturn(
+			new PathResponse(stations, duration, distance, fare));
+
+		mockMvc.perform(get("/paths")
+			.header("Authorization", "Bearer " + tokenResponse.getAccessToken())
+			.queryParam("source", "1")
+			.queryParam("target", "2")
+			.queryParam("type", "DISTANCE")
+		).andExpect(status().isOk())
+			.andDo(PathDocumentation.findPathWithLogin());
 	}
 
 	@Test

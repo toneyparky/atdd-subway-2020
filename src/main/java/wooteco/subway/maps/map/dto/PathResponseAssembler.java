@@ -18,8 +18,12 @@ public class PathResponseAssembler {
                 .collect(Collectors.toList());
 
         int distance = subwayPath.calculateDistance();
-
         int fare = subwayPath.calculateExtraFareByDistance() + extraFareByLine + DEFAULT_FARE;
+
+        if (member.isDummy()) {
+            return new PathResponse(stationResponses, subwayPath.calculateDuration(), distance, fare);
+        }
+
         return new PathResponse(stationResponses, subwayPath.calculateDuration(), distance, member.discountFare(fare));
     }
 }
